@@ -1,0 +1,22 @@
+{
+  "version": "1.0",
+  "defaultProvider": "unpkg",
+  "libraries": [
+    {
+      "library": "@microsoft/signalr@latest",
+      "destination": "wwwroot/js/microsoft/signalr/",
+      "files": [
+        "dist/browser/signalr.min.js"
+      ]
+    },
+    {
+      "library": "jquery-bracket@0.11.1",
+      "destination": "wwwroot/lib/jquery-bracket/",
+      "files": [
+        "dist/jquery.bracket.min.css",
+        "dist/jquery.bracket.min.js",
+        "lib/jquery.d.ts"
+      ]
+    }
+  ]
+}

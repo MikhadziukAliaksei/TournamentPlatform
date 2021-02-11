@@ -1,0 +1,27 @@
+﻿.card-team-mh {
+    height: 120px;
+}
+
+.delete-card-button {
+    right: 2px;
+    top: 2px;
+}
+
+.update-card-button {
+    right: 2px;
+    top: 42px;
+}
+
+.card-button {
+    position: absolute;
+    opacity: 0;
+    transition: 1s;
+}
+
+.card:hover .card-button {
+    opacity: 1;
+}
+
+.team-logo {
+    max-height: 200px;
+}

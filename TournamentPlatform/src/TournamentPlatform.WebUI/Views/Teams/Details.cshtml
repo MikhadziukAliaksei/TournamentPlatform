@@ -1,0 +1,125 @@
+﻿@using TournamentPlatform.DL.Domain.BusinessDomains
+@model TeamDetailsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-9">
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <div class="card border-primary">
+                        <div class="card-header bg-primary text-light">
+                            Team
+                        </div>
+                        <div class="row no-gutters">
+                            <div class="col-3 d-flex align-items-center justify-content-center ml-3">
+                                <img class="card-img mx-auto d-block" src="/img/teams/@Model.LogoPath" alt="Card image cap">
+                            </div>
+                            <div class="col-8">
+                                <div class="card-body">
+                                    <h1 class="card-title">@Model.Name</h1>
+                                    <p class="card-text text-wrap text-break">@Model.Description</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card border-primary">
+                        <div class="card-header bg-primary text-light">
+                            Tournaments
+                        </div>
+                        <div class="card-body">
+                            @foreach (var tournament in Model.Tournaments)
+                            {
+                                <div class="card border-secondary">
+                                    <div class="card-header bg-secondary text-dark">
+                                        @tournament.Name
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            @foreach (var match in tournament.Matches)
+                                            {
+                                                {
+                                                    var firstTeamInfo = match.TeamInfo.First();
+                                                    var secondTeamInfo = match.TeamInfo.Skip(1).First();
+
+                                                    secondTeamInfo.Team ??= new Team
+                                                    {
+                                                        Name = "Deleted"
+                                                    };
+
+                                                    <div class="col-1">
+                                                        @if (firstTeamInfo.TeamId != null)
+                                                        {
+                                                            <img class="img-fluid" src="/img/teams/@firstTeamInfo.Team.LogoPath">
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="oi oi-circle-x"></span>
+                                                        }
+                                                    </div>
+                                                    <div class="col-4 text-right">
+                                                        <a asp-controller="Teams" asp-action="Details" asp-route-id="@firstTeamInfo.Team.Id">@firstTeamInfo.Team.Name</a>
+                                                    </div>
+                                                    <div class="col-2 text-center">@firstTeamInfo.Score : @secondTeamInfo.Score</div>
+                                                    <div class="col-4">
+                                                        <a asp-controller="Teams" asp-action="Details" asp-route-id="@secondTeamInfo.Team.Id">@secondTeamInfo.Team.Name</a>
+                                                    </div>
+                                                    <div class="col-1">
+                                                        @if (secondTeamInfo.TeamId != null)
+                                                        {
+                                                            <img class="img-fluid" src="/img/teams/@secondTeamInfo.Team.LogoPath">
+                                                        }
+                                                        else
+                                                        {
+                                                            <span class="oi oi-circle-x"></span>
+                                                        }
+                                                    </div>
+                                                }
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card border-primary">
+                <div class="card-header bg-primary text-light d-flex align-items-center justify-content-between">
+                    Players
+                    <button class="btn p-0" data-toggle="modal" data-target="#inviteModal"><span class="oi oi-plus pull-right"></span></button>
+                </div>
+                <ul class="list-group list-group-flush">
+                    @foreach (var player in Model.Players)
+                    {
+                        <li class="list-group-item">@player.Name</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<partial name="InvitePlayerPartial" model="@Model"/>
+
+@section Scripts {
+    <script>
+        // установка имени пользователя
+        $("#inviteForm").submit(function (event) {
+            event.preventDefault();
+            let nickname = event.target["nickname"].value;
+            let id = event.target["id"].value;
+            window.hubConnection.invoke('SendInvite', nickname, id);
+        });
+    </script>
+}

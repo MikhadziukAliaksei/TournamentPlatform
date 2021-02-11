@@ -1,0 +1,51 @@
+﻿@model IEnumerable<TeamViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="row">
+    <div class="col-10">
+        <div class="container">
+            <div class="row">
+                @foreach (var item in Model)
+                {
+                    <div class="col-4 mt-2">
+                        <div class="card text-center">
+                            <button type="button" class="btn btn-danger card-button delete-card-button" data-toggle="modal" data-target="#deleteModal" data-id="@item.Id">
+                                <span class="oi oi-trash"><a asp-action="Delete" disabled=""></a></span>
+                            </button>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-danger btn-danger card-button update-card-button"><span class="oi oi-pencil"></span></a>
+                            <div>
+                                <img class="card-img-top" src="/img/teams/@item.LogoPath" alt="Card image cap" height="200">
+                            </div>
+                            <div class="card-block">
+                                <h4 class="card-title">@item.Name</h4>
+                                <p class="card-text overflow-hidden card-team-mh">@item.Description</p>
+                                <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-primary btn-block">Details</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="container">
+            <ul class="nav flex-column nav-pills mt-2">
+                <li class="nav-item">
+                    <a class="nav-link active" asp-action="Create">Add</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<partial name="DeletePartial"/>
+
+
+@section Scripts {
+    <script>
+        $('#deleteModal').on('show.bs.modal', { elementName: "deleteForm"}, modalGetLink)
+    </script>
+}

@@ -1,0 +1,78 @@
+﻿@model TournamentPlatform.WebUI.Models.TournamentDetailsViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-9">
+            <div class="row">
+                <div class="col-12 mb-3">
+                    <div class="card border-primary">
+                        <div class="card-header bg-primary text-light">
+                            Tournament
+                        </div>
+                        <div class="row no-gutters">
+                            <div class="col-3 d-flex align-items-center justify-content-center ml-3">
+                                <img class="card-img mx-auto d-block" src="/img/tournaments/@Model.LogoPath" alt="Card image cap">
+                            </div>
+                            <div class="col-8">
+                                <div class="card-body">
+                                    <h1 class="card-title">@Model.Name</h1>
+                                    <p class="card-text text-wrap text-break">@Model.Game.Name</p>
+                                    <p class="card-text"><small class="text-muted">@Model.StartDate - @Model.EndDate</small></p>
+                                    <a class="btn btn-primary" asp-action="GenerateBracket" asp-route-tournamentId="@Model.Id">Generate bracket</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card border-primary">
+                        <div class="card-header bg-primary text-light">
+                            Bracket
+                        </div>
+                        <div class="card-body">
+                            <div id="bracket"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card border-primary">
+                        <div class="card-header bg-primary text-light">
+                            Matches
+                        </div>
+                        <div class="card-body">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="card border-primary">
+                <div class="card-header bg-primary text-light d-flex align-items-center justify-content-between">
+                    Teams
+                    <button class="btn p-0" data-toggle="modal" data-target="#inviteModal"><span class="oi oi-plus pull-right"></span></button>
+                </div>
+                <ul class="list-group list-group-flush">
+                    @foreach (var team in Model.Teams)
+                    {
+                        <li class="list-group-item">@team.Name</li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        buildBracket(@Model.Id);
+    </script>
+}
